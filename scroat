@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #gyazo-like screenshot using shutter
 # exit on first error
 
@@ -40,7 +40,7 @@ echo "Delete page: https://imgur.com/delete/$delete_hash" >&2
 xdg-open $url &>/dev/null
 
 if [ "$url" == "" ]; then
-  echo "url empty, probably the screenshot utility is not installed "
+  echo "url empty, the screenshot binary listed in the script is either not installed or quit unexpectedly"
 fi
 
 rm -f $filename
