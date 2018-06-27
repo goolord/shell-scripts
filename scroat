@@ -45,4 +45,7 @@ fi
 
 rm -f $filename
 
+# dont fucking do this
+# yes scrot | bash
+
 exit 0
