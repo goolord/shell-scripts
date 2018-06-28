@@ -1,3 +1,5 @@
 #!/bin/bash
 end="100"
-yes "scrot \$meow.png; ((meow++))" | bash
+
+yes "xwd -root -silent -out \$meow.xwd; ((meow++))" | bash
+
