@@ -46,6 +46,10 @@ fi
 rm -f $filename
 
 # dont fucking do this
-# yes scrot | bash
+# modify this to output to ram and then to imagemagic or ffmpeg as a gif 
+# maybe change quality
+# currently it overwrites the name as per the default so it goes 1 fps
+# yes scrot | bash 
+# also nohup x & so it can be asynch probably
 
 exit 0
