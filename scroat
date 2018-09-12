@@ -11,6 +11,7 @@ function shot {
 # shutter -e -n -s -o "$filename" &>/dev/null
 # scrot -s "$filename" &>/dev/null
 gnome-screenshot -a -f $filename &>/dev/null
+# flameshot config -f "%m.%d.%Y.%R" && flameshot gui -p /tmp/ &>/dev/null
 }
 
 #idk how to implement closing the script when you press "esc" w/o complicating this
