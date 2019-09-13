@@ -1,0 +1,15 @@
+#! /bin/sh
+case "$1" in
+  haskell)
+    $TERM -e $SHELL -c 'cd $HOME/Documents/test && ghcid -c cabal v2-repl; exit' &
+    cd ~/Documents/test/ && sleep 0.1 && i3-msg focus left && nvim ~/Documents/test/test.hs
+    ;;
+
+  rust)
+    cd ~/Documents/test/testrust && nvim ~/Documents/test/testrust/src/main.rs
+    ;;
+
+  *)
+    echo "Usage: $0 {haskell|rust}"
+    ;;
+esac
