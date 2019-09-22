@@ -20,10 +20,10 @@ if [ -n "${ACTION}" ];then
   Suspend)
     lock && systemctl suspend
     ;;
-  Log Out)
+  'Log Out')
     i3-msg exit
     ;;
-  Lock Screen)
+  'Lock Screen')
     lock
     ;;
   esac
