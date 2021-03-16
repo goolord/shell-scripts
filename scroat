@@ -4,21 +4,19 @@
 
 NOW="$(date +"%m.%d.%Y.%R")"
 filename="/tmp/${NOW}.png"
-content_type="image/png"
-
 
 function shot {
-# shutter -e -n -s -o "$filename" &>/dev/null
-# scrot -s "$filename" &>/dev/null
-# gnome-screenshot -a -f $filename &>/dev/null
-# flameshot config -f "%m.%d.%Y.%R" && flameshot gui -p /tmp/ &>/dev/null
-DIMS="$(slurp)"
-if [ -n "$DIMS" ]; 
-then
-  grim -g "$DIMS" $filename &>/dev/null
-else
-  grim $filename &>/dev/null
-fi
+  # shutter -e -n -s -o "$filename" &>/dev/null
+  # scrot -s "$filename" &>/dev/null
+  # gnome-screenshot -a -f $filename &>/dev/null
+  # flameshot config -f "%m.%d.%Y.%R" && flameshot gui -p /tmp/ &>/dev/null
+  DIMS="$(slurp)"
+  if [ -n "$DIMS" ]; 
+  then
+    grim -g "$DIMS" "$filename"
+  else
+    grim "$filename"
+  fi
 }
 
 #idk how to implement closing the script when you press "esc" w/o complicating this
@@ -45,13 +43,15 @@ if [ -n "${ACTION}" ]; then
   case $ACTION in
     Save)
       NEW_FILE=$(zenity --file-selection --save --confirm-overwrite --filename=".png")
-      mv $filename $NEW_FILE
+      mv "$filename" "$NEW_FILE"
       ;;
     'Copy to clipboard')
-      xclip -selection clipboard -t image/png -i $filename
+      xclip -selection clipboard -t image/png -i "$filename"
       ;;
     Imgur)
       clientid="c9a6efb3d7932fd"
+      content_type="image/png"
+
 
       function upload {
           curl -sH "Authorization: Client-ID $clientid" -H "Expect: " -F "image=@$filename" "https://api.imgur.com/3/image.xml"
@@ -63,10 +63,10 @@ if [ -n "${ACTION}" ]; then
       url="${url%%</link>*}"
       delete_hash="${response##*<deletehash>}"
       delete_hash="${delete_hash%%</deletehash>*}"
-      echo $url | sed 's/^http:/https:shift/'
+      ${url//^http:/https:shift}
       echo "Delete page: https://imgur.com/delete/$delete_hash" >&2
 
-      xdg-open $url &>/dev/null
+      xdg-open "$url" &>/dev/null
 
       if [ "$url" == "" ]; then
         echo "url empty, the screenshot binary listed in the script is either not installed or quit unexpectedly"
@@ -75,6 +75,6 @@ if [ -n "${ACTION}" ]; then
   esac
 fi
 
-rm -f $filename
+rm -f "$filename"
 
 exit 0

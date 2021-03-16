@@ -21,7 +21,7 @@ if [ -n "${ACTION}" ];then
     lock && systemctl suspend
     ;;
   'Log Out')
-    xfce4-session-logout --logout -f
+    i3-msg exit
     ;;
   'Lock Screen')
     lock

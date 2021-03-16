@@ -1,12 +1,13 @@
 #! /bin/sh
 case "$1" in
   haskell)
-    $TERM -e $SHELL -c 'cd $HOME/Documents/test && ghcid -c cabal v2-repl; exit' &
-    cd ~/Documents/test/ && sleep 0.1 && i3-msg focus left && nvim ~/Documents/test/test.hs
+    # $TERM -e $SHELL -c 'cd $HOME/Dev/test && ghcid -c cabal v2-repl; exit' &
+    # cd ~/Dev/test/ && sleep 0.1 && i3-msg focus left && nvim ~/Dev/test/test.hs
+    cd ~/Dev/test/ && nvim ~/Dev/test/test.hs
     ;;
 
   rust)
-    cd ~/Documents/test/testrust && nvim ~/Documents/test/testrust/src/main.rs
+    cd ~/Dev/test/testrust && nvim ~/Dev/test/testrust/src/main.rs
     ;;
 
   *)
