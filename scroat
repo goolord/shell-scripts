@@ -46,7 +46,7 @@ if [ -n "${ACTION}" ]; then
       mv "$filename" "$NEW_FILE"
       ;;
     'Copy to clipboard')
-      xclip -selection clipboard -t image/png -i "$filename"
+      wl-copy -t image/png < "$filename"
       ;;
     Imgur)
       clientid="c9a6efb3d7932fd"
