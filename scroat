@@ -61,9 +61,9 @@ if [ -n "${ACTION}" ]; then
 
       url="${response##*<link>}"
       url="${url%%</link>*}"
+      url=${url//^http:/https:shift}
       delete_hash="${response##*<deletehash>}"
       delete_hash="${delete_hash%%</deletehash>*}"
-      ${url//^http:/https:shift}
       echo "Delete page: https://imgur.com/delete/$delete_hash" >&2
 
       xdg-open "$url" &>/dev/null
