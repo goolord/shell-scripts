@@ -9,6 +9,8 @@ ACTION=`zenity --width=250 --height=300 --list --radiolist --text="Select logout
   FALSE Suspend \
   `
 
+brightnessctl --save
+
 if [ -n "${ACTION}" ];then
   case $ACTION in
   Shutdown)
