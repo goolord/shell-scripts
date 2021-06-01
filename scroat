@@ -1,6 +1,8 @@
-#!/bin/bash
-#gyazo-like screenshot using shutter
+# !/bin/zsh
+# gyazo-like screenshot using shutter on x, or grim on wayland
+
 # exit on first error
+set -e -o pipefail
 
 NOW="$(date +"%m.%d.%Y.%R")"
 filename="/tmp/${NOW}.png"
@@ -18,13 +20,6 @@ function shot {
     grim "$filename"
   fi
 }
-
-#idk how to implement closing the script when you press "esc" w/o complicating this
-
-#while [[ "$key" == "$'\e'" ]]
-#  do
-#    exit 0
-#done
 
 shot
 

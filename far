@@ -1,2 +1,9 @@
 #! /bin/sh
-rg $2 $1 -l --fixed-strings | xargs sed -i -e "s@$2@$3@g" || echo "usage: far /path/to/directory/ 'oldstring' 'newstring'"
+set -e -o pipefail
+if [ -z "$3" ]
+then 
+  echo "usage: far /path/to/directory/ 'oldstring' 'newstring'"
+  exit 1
+fi
+FIND=$(rg "$2" "$1" -l --fixed-strings) 
+sed -i -e "s@$2@$3@g" "$FIND"
