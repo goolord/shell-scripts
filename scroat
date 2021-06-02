@@ -4,7 +4,7 @@
 # exit on first error
 set -e -o pipefail
 
-NOW="$(date +"%m.%d.%Y.%R")"
+NOW=$(date +'%m.%d.%Y.%R')
 filename="/tmp/${NOW}.png"
 
 function shot {
@@ -45,8 +45,6 @@ if [ -n "${ACTION}" ]; then
       ;;
     Imgur)
       clientid="c9a6efb3d7932fd"
-      content_type="image/png"
-
 
       function upload {
           curl -sH "Authorization: Client-ID $clientid" -H "Expect: " -F "image=@$filename" "https://api.imgur.com/3/image.xml"
