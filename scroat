@@ -1,9 +1,6 @@
 # !/bin/zsh
 # gyazo-like screenshot using shutter on x, or grim on wayland
 
-# exit on first error
-set -e -o pipefail
-
 NOW=$(date +'%m.%d.%Y.%R')
 filename="/tmp/${NOW}.png"
 
