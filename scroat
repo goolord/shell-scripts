@@ -11,7 +11,7 @@ function shot {
   # gnome-screenshot -a -f $filename &>/dev/null
   # flameshot config -f "%m.%d.%Y.%R" && flameshot gui -p /tmp/ &>/dev/null
   DIMS="$(slurp)"
-  if [ -n "$DIMS" ]; 
+  if [ -n "$DIMS" ];
   then
     grim -g "$DIMS" "$filename"
   else
