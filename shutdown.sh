@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/zsh
 
 ACTION=`zenity --width=250 --height=300 --list --radiolist --text="Select logout action" --title="Logout"  \
   --column "Choice" --column "Action" \
@@ -8,6 +8,8 @@ ACTION=`zenity --width=250 --height=300 --list --radiolist --text="Select logout
   FALSE 'Log Out' \
   FALSE Suspend \
   `
+
+brightnessctl get >| ~/.cache/brightness
 
 if [ -n "${ACTION}" ];then
   case $ACTION in
