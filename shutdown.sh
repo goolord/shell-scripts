@@ -23,7 +23,7 @@ if [ -n "${ACTION}" ];then
     lock && systemctl suspend
     ;;
   'Log Out')
-    i3-msg exit
+    swaymsg exit
     ;;
   'Lock Screen')
     lock
