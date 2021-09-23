@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/usr/bin/zsh
 set -e -o pipefail
 if [ -z "$3" ]
 then 

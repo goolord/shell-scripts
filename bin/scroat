@@ -1,4 +1,4 @@
-# !/bin/zsh
+#!/usr/bin/zsh
 # gyazo-like screenshot using shutter on x, or grim on wayland
 
 NOW=$(date +'%m.%d.%Y.%R')

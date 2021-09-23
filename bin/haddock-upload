@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/zsh
 set -e
 
 dir=$(mktemp -d dist-docs.XXXXXX)

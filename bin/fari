@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/zsh
 DIR="$0"
 
 function fzf_search () {
