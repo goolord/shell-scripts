@@ -1,11 +1,11 @@
 #!/usr/bin/zsh
 set -e -o pipefail
-cd ~/Dev/test/"$0"
+cd ~/Dev/test/"$1"
 case "$1" in
   haskell)
     # $TERM -e $SHELL -c 'cd $HOME/Dev/test && ghcid -c cabal v2-repl; exit' &
     # cd ~/Dev/test/ && sleep 0.1 && i3-msg focus left && nvim ~/Dev/test/test.hs
-    nvim ~/Dev/test/haskell/test.hs
+    nvim ~/Dev/test/haskell/Main.hs
     ;;
 
   rust)
