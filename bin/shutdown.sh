@@ -20,7 +20,7 @@ if [ -n "${ACTION}" ];then
     zenity --question --no-wrap --text "Are you sure you want to reboot?" && systemctl reboot
     ;;
   Suspend)
-    lock && systemctl suspend
+    lock; systemctl suspend
     ;;
   'Log Out')
     swaymsg exit
