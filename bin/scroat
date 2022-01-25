@@ -34,7 +34,7 @@ ACTION=$(zenity --question --title 'Scroat: Image capture options' \
 if [ -n "${ACTION}" ]; then
   case $ACTION in
     Save)
-      NEW_FILE=$(zenity --file-selection --save --confirm-overwrite --filename=".png")
+      NEW_FILE=$(zenity --file-selection --save --confirm-overwrite --filename="${HOME}/Pictures/${NOW}.png")
       mv "$filename" "$NEW_FILE"
       ;;
     'Copy to clipboard')

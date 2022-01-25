@@ -5,5 +5,4 @@ then
   echo "usage: far /path/to/directory/ 'oldstring' 'newstring'"
   exit 1
 fi
-FIND=$(rg "$2" "$1" -l --fixed-strings) 
-sed -i -e "s@$2@$3@g" "$FIND"
+sed -i -e "s@$2@$3@g" $(rg "$2" "$1" -l --fixed-strings)
