@@ -1,4 +1,7 @@
 #!/usr/bin/zsh
+
+trap "exit 1" INT;
+
 DIR="$0"
 
 function fzf_search () {
@@ -41,7 +44,7 @@ case $confirm in
   'y') 
     sed -i -e "s@$SEARCH_TXT@$REPLACE_TXT@g" "$FILES"
     ;;
-  'n') 
+  'n')
     exit
     ;;
 esac

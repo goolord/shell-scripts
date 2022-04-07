@@ -1,0 +1,2 @@
+#!/usr/bin/zsh
+wf-recorder -g "$(slurp)" -f ~/Videos/scunt.mp4
