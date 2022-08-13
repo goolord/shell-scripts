@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/usr/bin/env zsh
 
 ACTION=`zenity --width=250 --height=300 --list --radiolist --text="Select logout action" --title="Logout"  \
   --column "Choice" --column "Action" \

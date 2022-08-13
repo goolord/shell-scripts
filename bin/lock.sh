@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/usr/bin/env zsh
 
 B='#3c3836ff'  # background
 D='#1d2021ff'  # default

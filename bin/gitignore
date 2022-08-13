@@ -1,2 +1,2 @@
-#!/usr/bin/zsh
+#!/usr/bin/env zsh
 curl https://raw.githubusercontent.com/github/gitignore/master/${(C)1}.gitignore > .gitignore

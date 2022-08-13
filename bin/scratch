@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/usr/bin/env zsh
 set -e -o pipefail
 cd ~/Dev/test/"$1"
 case "$1" in
