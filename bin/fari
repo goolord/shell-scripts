@@ -15,17 +15,9 @@ function fzf_search () {
 
 SEARCH_TXT="$(fzf_search | head -1)"
 
-echo $SEARCH_TXT
-echo
-echo
-
-FILES=$(rg --smart-case -l \""$SEARCH_TXT"\" | cat)
-echo $FILES
-echo
-echo
+FILES=$(rg --smart-case -l "$SEARCH_TXT")
 
 function fzf_replace () {
-  export 
   SED_PREFIX="sed -n -e 's@$SEARCH_TXT@{q}@gp' $FILES"
   FZF_DEFAULT_COMMAND="$SED_PREFIX" \
     fzf --bind "change:reload:$SED_PREFIX || true" \
@@ -34,17 +26,25 @@ function fzf_replace () {
         --print-query
 }
 
-REPLACE_RES="$(fzf_replace)"
-REPLACE_TXT=("${REPLACE_RES[0]}")
+REPLACE_TXT=$(echo "$(fzf_replace)" | head -1)
+echo $REPLACE_TXT
 
-echo "looks good?"
+printf "Search: ${SEARCH_TXT}\n"
+printf "Replace: ${REPLACE_TXT}\n"
+printf "Files: %s\n" "$(echo $FILES | tr '\n' ' ')"
+echo
+echo "Looks good?"
 read -r confirm
 
 case $confirm in
-  'y') 
-    sed -i -e "s@$SEARCH_TXT@$REPLACE_TXT@g" "$FILES"
+  'y')
+    echo $FILES | xargs sed -i .farbu -e "s@$SEARCH_TXT@$REPLACE_TXT@g"
     ;;
   'n')
     exit
     ;;
 esac
+
+LIGHT_RED='\033[1;31m'
+NC='\033[0m' # No Color
+printf "if all is well, you may run ${LIGHT_RED}\`fd .farbu -x rm\`${NC}\n"
