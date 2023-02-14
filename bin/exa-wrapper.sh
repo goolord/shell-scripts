@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 ## Change following to '0' for output to be like ls and '1' for exa features
 # Don't list implied . and .. by default with -a
