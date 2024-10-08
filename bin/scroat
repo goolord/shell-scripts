@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 # gyazo-like screenshot using shutter on x, or grim on wayland
 
-set -e
+# set -e
 
 NOW=$(date +'%m.%d.%Y.%R')
 filename="/tmp/${NOW}.png"
