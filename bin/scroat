@@ -24,10 +24,10 @@ shot
 
 ACTION=$(zenity --question --title 'Scroat: Image capture options' \
     --text 'Image captured' \
-    --extra-button Save \
-    --extra-button 'Copy to clipboard' \
-    --extra-button Imgur \
     --extra-button Cancel \
+    --extra-button Imgur \
+    --extra-button 'Copy to clipboard' \
+    --extra-button Save \
     --switch \
     --width 200 \
     --height 100 \
