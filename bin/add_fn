@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# Check if an image file is provided
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <image-file>"
+    exit 1
+fi
+
+FONT="Liberation-Sans-Bold"
+
+# Get the input image file
+input_image="$1"
+
+# Extract the filename without the extension
+filename=$(basename "$input_image")
+filename_no_ext="${filename%.*}"
+
+# Define the output image file
+output_image="./withtext/${filename}"
+
+# Get the dimensions of the image
+image_width=$(identify -format "%w" "$input_image")
+image_height=$(identify -format "%h" "$input_image")
+
+image_width=$(echo "$image_width * 3" | bc)
+image_height=$(echo "$image_height * 3" | bc)
+
+font_size=48
+
+text_width=$(echo "$1" | magick -font "$FONT" -pointsize "$font_size" -gravity North -background none label:"$1" -format "%w" info:)
+text_height=$(echo "$1" | magick -font "$FONT" -pointsize "$font_size" -gravity North -background none label:"$1" -format "%h" info:)
+
+min_width=$(echo "scale=0; $text_width + 6" | bc)
+min_height=$(echo "scale=0; $text_height * 3" | bc)
+
+if [ $(echo "$min_width > $image_width" | bc) -eq 1 ]; then
+  image_width=$min_width
+fi
+
+if [ $(echo "$min_height > $image_height" | bc) -eq 1 ]; then
+  image_height=$min_height
+fi
+
+# Use ImageMagick to add the filename to the image
+magick "$input_image" \
+    -resize "${min_width}x${min_height}<" \
+    -gravity center \
+    -extent "${text_width}x${min_height}<" \
+    -gravity South \
+    -background transparent \
+    -transparent white \
+    -font "$FONT" -pointsize "$font_size" \
+    -stroke black -strokewidth 5 -fill none \
+    -annotate +0+5 "$filename_no_ext" \
+    -stroke none -fill white \
+    -annotate +0+5 "$filename_no_ext" \
+    "$output_image"
+
+    # -fuzz 1% -trim \
+
+echo "Added filename to image: $output_image"
