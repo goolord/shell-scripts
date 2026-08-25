@@ -24,6 +24,7 @@ shot
 
 ACTION=$(zenity --question --title 'Scroat: Image capture options' \
     --text 'Image captured' \
+    --icon camera-photo \
     --extra-button Cancel \
     --extra-button Imgur \
     --extra-button 'Copy to clipboard' \
@@ -37,7 +38,12 @@ if [ -n "${ACTION}" ]; then
   case $ACTION in
     Save)
       NEW_FILE=$(zenity --file-selection --save --confirm-overwrite --filename="${HOME}/Pictures/${NOW}.png")
-      mv "$filename" "$NEW_FILE"
+      if [ -n "$NEW_FILE" ]; then
+        mv "$filename" "$NEW_FILE"
+      else
+        echo "save cancelled, screenshot kept at $filename" >&2
+        exit 0
+      fi
       ;;
     'Copy to clipboard')
       wl-copy -t image/png < "$filename"
@@ -51,17 +57,16 @@ if [ -n "${ACTION}" ]; then
 
       response=$(upload)
 
-      url="${response##*<link>}"
-      url="${url%%</link>*}"
-      url=${url//^http:/https:shift}
-      delete_hash="${response##*<deletehash>}"
-      delete_hash="${delete_hash%%</deletehash>*}"
-      echo "Delete page: https://imgur.com/delete/$delete_hash" >&2
-
-      xdg-open "$url" &>/dev/null
-
-      if [ "$url" == "" ]; then
-        echo "url empty, the screenshot binary listed in the script is either not installed or quit unexpectedly"
+      if [[ "$response" == *'<link>'* ]]; then
+        url="${response##*<link>}"
+        url="${url%%</link>*}"
+        url=${url/#http:/https:}
+        delete_hash="${response##*<deletehash>}"
+        delete_hash="${delete_hash%%</deletehash>*}"
+        echo "Delete page: https://imgur.com/delete/$delete_hash" >&2
+        xdg-open "$url" &>/dev/null
+      else
+        echo "imgur upload failed or response could not be parsed" >&2
       fi
       ;;
   esac

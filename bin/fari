@@ -2,8 +2,6 @@
 
 trap "exit 1" INT;
 
-DIR="$0"
-
 function fzf_search () {
   RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
   FZF_DEFAULT_COMMAND="$RG_PREFIX ''" \
@@ -15,10 +13,15 @@ function fzf_search () {
 
 SEARCH_TXT="$(fzf_search | head -1)"
 
-FILES=$(rg --smart-case -l "$SEARCH_TXT")
+FILES=("${(@f)$(rg --smart-case -l "$SEARCH_TXT")}")
+
+# escape sed delimiter in the pattern, and backrefs/delimiter in the replacement
+SEARCH_ESC=$(printf '%s' "$SEARCH_TXT" | sed 's/[@\\]/\\&/g')
+# the sed script below is single-quoted, so protect embedded single quotes
+SEARCH_PREVIEW=${SEARCH_ESC//\'/\'\\\'\'}
 
 function fzf_replace () {
-  SED_PREFIX="sed -n -e 's@$SEARCH_TXT@{q}@gp' $FILES"
+  SED_PREFIX="sed -n -e 's@$SEARCH_PREVIEW@{q}@gp' ${(q)FILES[@]}"
   FZF_DEFAULT_COMMAND="$SED_PREFIX" \
     fzf --bind "change:reload:$SED_PREFIX || true" \
         --ansi --disabled \
@@ -26,19 +29,19 @@ function fzf_replace () {
         --print-query
 }
 
-REPLACE_TXT=$(echo "$(fzf_replace)" | head -1)
-echo $REPLACE_TXT
+REPLACE_TXT=$(fzf_replace | head -1)
+REPLACE_ESC=$(printf '%s' "$REPLACE_TXT" | sed 's/[@&\\]/\\&/g')
 
 printf "Search: ${SEARCH_TXT}\n"
 printf "Replace: ${REPLACE_TXT}\n"
-printf "Files: %s\n" "$(echo $FILES | tr '\n' ' ')"
+printf "Files: %s\n" "${FILES[*]}"
 echo
 echo "Looks good?"
 read -r confirm
 
 case $confirm in
   'y')
-    echo $FILES | xargs sed -i .farbu -e "s@$SEARCH_TXT@$REPLACE_TXT@g"
+    printf '%s\0' "${FILES[@]}" | xargs -0 -r sed -i.farbu -e "s@$SEARCH_ESC@$REPLACE_ESC@g"
     ;;
   'n')
     exit

@@ -1,2 +1,14 @@
 #!/usr/bin/env zsh
-curl https://raw.githubusercontent.com/github/gitignore/master/${(C)1}.gitignore > .gitignore
+if [ -e .gitignore ]; then
+  read -q "?.gitignore exists, overwrite? [y/N] " || { echo; exit 1 }
+  echo
+fi
+# download to a temp file so a failed fetch can't clobber an existing .gitignore
+tmp=$(mktemp)
+if curl -fsSL "https://raw.githubusercontent.com/github/gitignore/master/${(C)1}.gitignore" -o "$tmp"; then
+  mv "$tmp" .gitignore
+else
+  rm -f "$tmp"
+  echo "no gitignore template found for '$1'" >&2
+  exit 1
+fi

@@ -1,3 +1,4 @@
+#!/bin/sh
 # directory of shell-scripts
 DIR="$( { cd "$(dirname "$0")" || exit; } ; pwd -P )"
 

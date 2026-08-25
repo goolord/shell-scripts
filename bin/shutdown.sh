@@ -1,13 +1,22 @@
 #!/usr/bin/env zsh
 
-ACTION=`zenity --width=250 --height=450 --list --radiolist --text="Select logout action" --title="Logout"  \
+# lock.sh wraps i3lock (X11 only); use swaylock when running under sway
+function lock {
+  if [ -n "$SWAYSOCK" ]; then
+    swaylock -f
+  else
+    lock.sh
+  fi
+}
+
+ACTION=$(zenity --width=250 --height=450 --list --radiolist --text="Select logout action" --title="Logout"  \
   --column "Choice" --column "Action" \
   TRUE Shutdown \
   FALSE Reboot \
   FALSE 'Lock Screen' \
   FALSE 'Log Out' \
   FALSE Suspend \
-  `
+  )
 
 brightnessctl get >| ~/.cache/brightness
 

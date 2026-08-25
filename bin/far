@@ -1,8 +1,15 @@
 #!/usr/bin/env zsh
 set -e -o pipefail
 if [ -z "$3" ]
-then 
+then
   echo "usage: far /path/to/directory/ 'oldstring' 'newstring'"
   exit 1
 fi
-sed -i -e "s@$2@$3@g" $(rg "$2" "$1" -l --fixed-strings)
+# rg matches literally, so escape the pattern for sed too
+old=$(printf '%s' "$2" | sed 's/[][\.*^$@]/\\&/g')
+new=$(printf '%s' "$3" | sed 's/[@&\\]/\\&/g')
+matches=$(rg -0 -l --fixed-strings -- "$2" "$1") || {
+  echo "no matches for '$2' in $1" >&2
+  exit 1
+}
+printf '%s' "$matches" | xargs -0 -r sed -i -e "s@$old@$new@g"
