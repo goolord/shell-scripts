@@ -26,7 +26,7 @@ ACTION=$(zenity --question --title 'Scroat: Image capture options' \
     --text 'Image captured' \
     --icon camera-photo \
     --extra-button Cancel \
-    --extra-button Imgur \
+    --extra-button Upload \
     --extra-button 'Copy to clipboard' \
     --extra-button Save \
     --switch \
@@ -48,25 +48,26 @@ if [ -n "${ACTION}" ]; then
     'Copy to clipboard')
       wl-copy -t image/png < "$filename"
       ;;
-    Imgur)
-      clientid="c9a6efb3d7932fd"
-
-      function upload {
-          curl -sH "Authorization: Client-ID $clientid" -H "Expect: " -F "image=@$filename" "https://api.imgur.com/3/image.xml"
-      }
-
-      response=$(upload)
-
-      if [[ "$response" == *'<link>'* ]]; then
-        url="${response##*<link>}"
-        url="${url%%</link>*}"
-        url=${url/#http:/https:}
-        delete_hash="${response##*<deletehash>}"
-        delete_hash="${delete_hash%%</deletehash>*}"
-        echo "Delete page: https://imgur.com/delete/$delete_hash" >&2
-        xdg-open "$url" &>/dev/null
+    Upload)
+      if ! response=$(curl -sS --max-time 120 -F "image=@$filename" https://kinja-img.com/api/upload); then
+        echo "upload failed: curl exited with status $?" >&2
+      elif ! jq -e '.success == true' <<< "$response" &>/dev/null; then
+        if error=$(jq -r '.error // empty' <<< "$response" 2>/dev/null) && [ -n "$error" ]; then
+          echo "upload failed: $error" >&2
+        else
+          echo "upload failed: could not parse response" >&2
+          echo "$response" >&2
+        fi
       else
-        echo "imgur upload failed or response could not be parsed" >&2
+        url=$(jq -r '.direct // empty' <<< "$response")
+        delete_url=$(jq -r '.delete_url // empty' <<< "$response")
+        if [ -n "$url" ]; then
+          [ -n "$delete_url" ] && echo "Delete page: $delete_url" >&2
+          xdg-open "$url" &>/dev/null
+        else
+          echo "upload failed: missing direct URL in response" >&2
+          echo "$response" >&2
+        fi
       fi
       ;;
   esac
